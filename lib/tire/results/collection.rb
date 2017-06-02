@@ -21,13 +21,13 @@ module Tire
       def results
         return [] if failure?
         @results ||= begin
-          hits = @response['hits']['hits'].map { |d| d.update '_type' => Utils.unescape(d['_type']) }
-          unless @options[:load]
-            __get_results_without_load(hits)
-          else
-            __get_results_with_load(hits)
-          end
-        end
+                       hits = @response['hits']['hits'].map { |d| d.update '_type' => Utils.unescape(d['_type']) }
+                       unless @options[:load]
+                         __get_results_without_load(hits)
+                       else
+                         __get_results_with_load(hits)
+                       end
+                     end
       end
 
       # Iterates over the `results` collection
@@ -131,15 +131,15 @@ module Tire
         records = {}
         @response['hits']['hits'].group_by { |item| item['_type'] }.each do |type, items|
           raise NoMethodError, "You have tried to eager load the model instances, " +
-                               "but Tire cannot find the model class because " +
-                               "document has no _type property." unless type
+            "but Tire cannot find the model class because " +
+            "document has no _type property." unless type
 
           begin
             klass = type.camelize.constantize
           rescue NameError => e
             raise NameError, "You have tried to eager load the model instances, but " +
-                             "Tire cannot find the model class '#{type.camelize}' " +
-                             "based on _type '#{type}'.", e.backtrace
+              "Tire cannot find the model class '#{type.camelize}' " +
+              "based on _type '#{type}'.", e.backtrace
           end
 
           records[type] = Array(__find_records_by_ids klass, items.map { |h| h['_id'] })
@@ -154,9 +154,16 @@ module Tire
       end
 
       def __find_records_by_ids(klass, ids)
-        @options[:load] === true ? klass.find(ids) : klass.find(ids, @options[:load])
+        if @options[:load] === true
+          klass.find(ids)
+        else
+          if @options[:load][:include]
+            klass.includes(@options[:load][:include]).find(ids)
+          else
+            klass.find(ids)
+          end
+        end
       end
     end
-
   end
 end
