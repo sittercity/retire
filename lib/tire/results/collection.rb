@@ -21,13 +21,13 @@ module Tire
       def results
         return [] if failure?
         @results ||= begin
-                       hits = @response['hits']['hits'].map { |d| d.update '_type' => Utils.unescape(d['_type']) }
-                       unless @options[:load]
-                         __get_results_without_load(hits)
-                       else
-                         __get_results_with_load(hits)
-                       end
-                     end
+          hits = @response['hits']['hits'].map { |d| d.update '_type' => Utils.unescape(d['_type']) }
+          unless @options[:load]
+            __get_results_without_load(hits)
+          else
+            __get_results_with_load(hits)
+          end
+        end
       end
 
       # Iterates over the `results` collection
