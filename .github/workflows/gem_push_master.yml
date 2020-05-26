@@ -1,4 +1,4 @@
-name: retire master
+name: tire master
 
 on:
   push:
