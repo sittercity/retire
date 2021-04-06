@@ -2,9 +2,15 @@
 $:.push File.expand_path("../lib", __FILE__)
 require "tire/version"
 
+prerelease = ENV['SC_PRERELEASE'] == 'true'
+
 Gem::Specification.new do |s|
   s.name        = "tire"
-  s.version     = Tire::VERSION
+  s.version = if prerelease
+                "#{Tire::VERSION}.pre#{Time.now.to_i}"
+              else
+                Tire::VERSION
+              end
   s.platform    = Gem::Platform::RUBY
   s.summary       = "Ruby client for Elasticsearch"
   s.homepage      = "http://github.com/karmi/tire"

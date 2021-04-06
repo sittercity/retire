@@ -1,8 +1,8 @@
 module Tire
-  VERSION   = "1.0.0"
+  VERSION   = "2.0.0"
 
   CHANGELOG =<<-END
     IMPORTANT CHANGES LATELY:
-      UPDATE TO RUBY 2.5
+      UPDATE TO RUBY 2.7.2
   END
 end
